@@ -2,7 +2,7 @@
 
 ## 2023 things
 
-- :check: tidyverse 2.0: https://www.tidyverse.org/blog/2023/03/tidyverse-2-0-0/
+- ✔️ tidyverse 2.0: https://www.tidyverse.org/blog/2023/03/tidyverse-2-0-0/
   - includes lubridate
   - advertise conflicted
 - dbplyr: https://www.tidyverse.org/blog/2023/01/dbplyr-2-3-0/
