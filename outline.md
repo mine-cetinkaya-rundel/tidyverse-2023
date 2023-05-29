@@ -6,10 +6,10 @@
   - includes lubridate
   - advertise conflicted
 - dplyr: 
-  - Joins: https://www.tidyverse.org/blog/2023/01/dplyr-1-1-0-joins/
+  - ✅  Joins: https://www.tidyverse.org/blog/2023/01/dplyr-1-1-0-joins/
     - `join_by()`
     - Multiple matches / warnings
-    - Rolling joins
+    - Inequality and rolling joins
   - Grouping: https://www.tidyverse.org/blog/2023/02/dplyr-1-1-0-per-operation-grouping/
     - Persistent vs. per operation grouping
   - `case_when()` + `case_match()`: https://www.tidyverse.org/blog/2023/02/dplyr-1-1-0-vctrs/
