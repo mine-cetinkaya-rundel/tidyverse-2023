@@ -2,7 +2,7 @@
 
 ## 2023 things
 
-- [ ] tidyverse 2.0: https://www.tidyverse.org/blog/2023/03/tidyverse-2-0-0/
+- :check: tidyverse 2.0: https://www.tidyverse.org/blog/2023/03/tidyverse-2-0-0/
   - includes lubridate
   - advertise conflicted
 - dbplyr: https://www.tidyverse.org/blog/2023/01/dbplyr-2-3-0/
@@ -35,5 +35,4 @@ Not strictly 2023 updates but recent enough to be worth pointing out:
 ## tidymodels things
 
 Maybe a couple of things from tidymodels that are widely relevant to users?
-
   
