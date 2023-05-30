@@ -1,6 +1,6 @@
 # Outline
 
-## 2023 things
+## go into depth
 
 - ✅ tidyverse 2.0: https://www.tidyverse.org/blog/2023/03/tidyverse-2-0-0/
   - includes lubridate
@@ -10,29 +10,22 @@
     - `join_by()`
     - Multiple matches / warnings
     - Inequality and rolling joins
-  - Grouping: https://www.tidyverse.org/blog/2023/02/dplyr-1-1-0-per-operation-grouping/
+  - ✅ Grouping: https://www.tidyverse.org/blog/2023/02/dplyr-1-1-0-per-operation-grouping/
     - Persistent vs. per operation grouping
-  - `case_when()` + `case_match()`: https://www.tidyverse.org/blog/2023/02/dplyr-1-1-0-vctrs/
+  - `case_when()` + `if_else()`: https://www.tidyverse.org/blog/2023/02/dplyr-1-1-0-vctrs/
   - `pick()`: https://www.tidyverse.org/blog/2023/02/dplyr-1-1-0-pick-reframe-arrange/
-  - `arrange()`: https://www.tidyverse.org/blog/2023/02/dplyr-1-1-0-pick-reframe-arrange/#arrange
 - tidyr: https://www.tidyverse.org/blog/2023/01/tidyr-1-3-0/
   - `separate_*()` family of functions 
 - forcats: https://www.tidyverse.org/blog/2023/01/forcats-1-0-0/
   - `NA` in levels vs `NA` in values
-- dbplyr: https://www.tidyverse.org/blog/2023/01/dbplyr-2-3-0/
 
-## R4DS things
-
-Not strictly 2023 updates but recent enough to be worth pointing out:
+## list at the end
 
 - stringr / https://r4ds.hadley.nz/strings.html
 - web scraping / https://r4ds.hadley.nz/webscraping.html
+- dbplyr: https://www.tidyverse.org/blog/2023/01/dbplyr-2-3-0/
 
 ## Other exciting things:
 
 - webR: https://www.tidyverse.org/blog/2023/03/webr-0-1-0/
-
-## tidymodels things
-
-Maybe a couple of things from tidymodels that are widely relevant to users?
-  
+- also developments in tidymodels on the tidyverse blog
