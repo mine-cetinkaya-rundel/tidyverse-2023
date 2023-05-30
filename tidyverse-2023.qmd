@@ -1313,6 +1313,14 @@ penguins |>
 :::
 :::
 
+## teaching tip
+
+::: callout-tip
+## Check the output of your old teaching materials thoroughly
+
+To not make a fool of yourself when teaching 🤣
+:::
+
 # and more...
 
 ## other tidyverse updates
@@ -1355,9 +1363,7 @@ For a comprehensive overview of data science with R and the tidyverse, read the 
 # thank you!
 
 ::: preslink
-🔗 <https://mine.quarto.pub/tidyverse-2023>
-<br><br>
-💻 <https://github.com/mine-cetinkaya-rundel/tidyverse-2023>
+🔗 <https://mine.quarto.pub/tidyverse-2023> <br><br> 💻 <https://github.com/mine-cetinkaya-rundel/tidyverse-2023>
 :::
 
 ::: footer
