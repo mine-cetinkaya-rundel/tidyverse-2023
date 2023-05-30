@@ -1,0 +1,4 @@
+- source: tidyverse-2023.qmd
+  quarto-pub:
+    - id: 4bd1bc29-e564-48f6-aad8-640c61ac61cc
+      url: 'https://mine.quarto.pub/tidyverse-2023'

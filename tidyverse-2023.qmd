@@ -1,0 +1,1335 @@
+---
+title: "what's new<br>in the tidyverse<br>in 2023?"
+subtitle: "[🔗 mine.quarto.pub/tidyverse-2023](https://mine.quarto.pub/tidyverse-2023) <br><br> [💻 github.com/mine-cetinkaya-rundel/tidyverse-2023](https://github.com/mine-cetinkaya-rundel/tidyverse-2023)"
+institute: "duke university + posit"
+author: "dr. mine çetinkaya-rundel"
+date: "2023-05-30"
+title-slide-attributes:
+  data-background-image: images/tidyverse-hexes.png
+logo: "images/tidyverse.png"
+format:
+  revealjs:
+    theme: theme.scss
+    transition: fade
+    slide-number: true
+    chalkboard: true
+    background-transition: fade
+    height: 900
+    width: 1600
+    fontcolor: "#262d36"
+    highlight-style: a11y-dark
+    multiplex: true
+    footer: "[🔗 mine.quarto.pub/tidyverse-2023](https://mine.quarto.pub/tidyverse-2023)"
+    include-after-body: clean_title.html
+    code-link: true
+editor: visual
+execute:
+  freeze: auto
+  echo: true
+  warning: true
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+# set width of code output
+options(width = 65)
+
+# set plot defaults
+ggplot2::theme_set(ggplot2::theme_gray(base_size = 14))
+
+# set figure parameters for knitr
+knitr::opts_chunk$set(
+  out.width = "80%",
+  fig.width = 8,        # 7" width
+  fig.asp = 0.618,      # the golden ratio
+  fig.retina = 3,       # dpi multiplier for displaying HTML output on retina
+  fig.align = "center", # center align figures
+  dpi = 300             # higher dpi, sharper image
+)
+
+options(
+  dplyr.print_min = 6, 
+  dplyr.print_max = 6
+)
+```
+
+# principles of the tidyverse
+
+## tidyverse
+
+::: columns
+::: {.column width="80%"}
+meta R package that loads nine core packages when invoked and also bundles numerous other packages that share a design philosophy, common grammar, and data structures
+
+::: {.fragment fragment-index="1"}
+```{r}
+#| warning: false
+
+library(tidyverse)
+```
+
+```         
+── Attaching core tidyverse packages ──────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.2     ✔ readr     2.1.4
+✔ forcats   1.0.0     ✔ stringr   1.5.0
+✔ ggplot2   3.4.2     ✔ tibble    3.2.1
+✔ lubridate 1.9.2     ✔ tidyr     1.3.0
+✔ purrr     1.0.1
+── Conflicts ────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package to force all conflicts to become errors
+```
+:::
+:::
+
+::: {.column width="20%"}
+![](images/tidyverse.png){fig-alt="Tidyverse hex icon" fig-align="center"}
+:::
+:::
+
+## tidyverse for data science
+
+::: {.fragment fragment-index="2"}
+![](images/data-science.png){fig-alt="Data science cycle: import, tidy, transform, visualize, model, communicate. Packages readr and tibble are for import. Packages tidyr and purr for tidy and transform. Packages dplyr, stringr, forcats, and lubridate are for transform. Package ggplot2 is for visualize." fig-align="center"}
+:::
+
+## setup: `penguins`
+
+```{r}
+library(palmerpenguins)
+penguins
+```
+
+::: aside
+:::
+
+## a typical tidyverse pipeline
+
+```{r}
+#| label: typical-pipeline
+#| fig-asp: 0.4
+#| fig-alt: |
+#|   Dodged bar plot of average body masses of penguins by species and sex.
+#|   Gentoo penguins weigh more, on average, than Adelies and Chinstraps, 
+#|   and within each species males weigh more, on average, than females.
+
+penguins |>
+  drop_na(sex, body_mass_g) |>
+  group_by(species, sex) |>
+  summarize(mean_bw = mean(body_mass_g), .groups = "drop") |>
+  ggplot(aes(x = species, y = mean_bw, fill = sex)) +
+  geom_col(position = "dodge")
+```
+
+## a typical tidyverse workflow
+
+```{r}
+#| code-line-numbers: "|1|1-2|1-3"
+
+penguins |>
+  group_by(species, sex) |>
+  summarize(mean_bw = mean(body_mass_g))
+```
+
+## a typical tidyverse workflow
+
+```{r}
+#| code-line-numbers: "2|1-4"
+
+penguins |>
+  drop_na(sex, body_mass_g) |>
+  group_by(species, sex) |>
+  summarize(mean_bw = mean(body_mass_g))
+```
+
+## a typical tidyverse workflow
+
+```{r}
+#| code-line-numbers: "4|1-4"
+
+penguins |>
+  drop_na(sex, body_mass_g) |>
+  group_by(species, sex) |>
+  summarize(mean_bw = mean(body_mass_g), .groups = "drop")
+```
+
+## a typical tidyverse workflow
+
+```{r}
+#| fig-asp: 0.4
+#| code-line-numbers: "5-6|1-6"
+#| fig-alt: |
+#|   Dodged bar plot of average body masses of penguins by species and sex.
+#|   Gentoo penguins weigh more, on average, than Adelies and Chinstraps, 
+#|   and within each species males weigh more, on average, than females.
+
+penguins |>
+  drop_na(sex, body_mass_g) |>
+  group_by(species, sex) |>
+  summarize(mean_bw = mean(body_mass_g), .groups = "drop") |>
+  ggplot(aes(x = species, y = mean_bw, fill = sex)) +
+  geom_col()
+```
+
+## a typical tidyverse workflow
+
+```{r}
+#| ref.label: typical-pipeline
+#| fig-asp: 0.4
+#| code-line-numbers: "6|1-6"
+#| fig-alt: |
+#|   Dodged bar plot of average body masses of penguins by species and sex.
+#|   Gentoo penguins weigh more, on average, than Adelies and Chinstraps, 
+#|   and within each species males weigh more, on average, than females.
+```
+
+## a note about this presentation
+
+-   Sometimes I'll show two options, where the *now* option is what you **should** do now.
+
+::: columns
+::: {.column width="45%"}
+### previously
+
+```{r}
+# you used to do
+```
+:::
+
+::: {.column width="5%"}
+:::
+
+::: {.column width="45%"}
+### now
+
+```{r}
+# now you should do
+```
+:::
+:::
+
+<br>
+
+. . .
+
+-   And sometimes I'll show two options, where the *now* option is what you **can** do now.
+
+::: columns
+::: {.column width="45%"}
+### previously
+
+```{r}
+# you used to do
+```
+:::
+
+::: {.column width="5%"}
+:::
+
+::: {.column width="45%"}
+### now - optionally
+
+```{r}
+# now you can do
+```
+:::
+:::
+
+<br>
+
+. . .
+
+-   There will be more of the latter than the former!
+
+. . .
+
+-   I'll also sprinkle in some teaching tips along the way.
+
+# tidyverse 2.0.0
+
+## what's new in tidyverse 2.0.0?
+
+-   **lubridate** is now a core tidyverse package
+-   package loading message advertises the **conflicted** package
+
+## lubridate - now core
+
+::: columns
+::: {.column width="80%"}
+**lubridate**, a package that makes it easier to do the things R does with date-times, is now a core tidyerse package.
+:::
+
+::: {.column width="20%"}
+![](images/lubridate.png){fig-alt="lubridate hex icon" fig-align="center"}
+:::
+:::
+
+::: columns
+::: {.column .fragment width="45%" fragment-index="1"}
+### previously
+
+```{r}
+#| eval: false
+
+library(tidyverse)
+library(lubridate)
+```
+:::
+
+::: {.column width="5%"}
+:::
+
+::: {.column .fragment width="45%" fragment-index="2"}
+### now
+
+```{r}
+#| eval: false
+
+library(tidyverse)
+```
+:::
+:::
+
+## lubridate - functionality
+
+lubridate is most useful for parsing numbers or text that repsent dates into date-time:
+
+```{r}
+today_n <- 20230530
+today_t <- "5/30/2023"
+today_s <- "The SSA Vic May Event takes place on 30 May 2023 at 6 pm."
+```
+
+::: columns
+::: {.column .fragment width="30%" fragment-index="1"}
+"Easy":
+
+```{r}
+class(today_n)
+ymd(today_n)
+class(ymd(today_n))
+```
+:::
+
+::: {.column width="3%"}
+:::
+
+::: {.column .fragment width="30%" fragment-index="2"}
+Slightly more complex:
+
+```{r}
+class(today_t)
+mdy(today_t)
+class(mdy(today_t))
+```
+:::
+
+::: {.column width="3%"}
+:::
+
+::: {.column .fragment width="30%" fragment-index="3"}
+Even more complex:
+
+```{r}
+class(today_s)
+dmy_h(today_s, tz = "Australia/Melbourne")
+class(dmy_h(today_s))
+```
+:::
+:::
+
+## conflicted - now advertised {.smaller}
+
+-   Load tidyverse:
+
+```{r}
+#| warning: false
+
+library(tidyverse)
+```
+
+```         
+── Attaching core tidyverse packages ──────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.2     ✔ readr     2.1.4
+✔ forcats   1.0.0     ✔ stringr   1.5.0
+✔ ggplot2   3.4.2     ✔ tibble    3.2.1
+✔ lubridate 1.9.2     ✔ tidyr     1.3.0
+✔ purrr     1.0.1
+── Conflicts ────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package to force all conflicts to become errors
+```
+
+. . .
+
+-   Explicitly check for conflicts with `tidyverse::tidyverse_conflicts()`:
+
+```{r}
+tidyverse_conflicts()
+```
+
+## conflict resolution with base R
+
+R's default conflict resolution gives precedence to the most recently loaded package
+
+-   Before loading tidyverse - calling `filter()` uses `stats::filter()`:
+
+```{r}
+#| include: false
+
+devtools::unload("dplyr")
+```
+
+```{r}
+#| error: true
+
+penguins |>
+  filter(species == "Adelie")
+```
+
+. . .
+
+-   After loading tidyverse - calling `filter()` *silently* uses `dplyr::filter()`:
+
+```{r}
+#| include: false
+
+library(dplyr)
+options(dplyr.print_min = 3, dplyr.print_max = 3)
+```
+
+```{r}
+penguins |>
+  filter(species == "Adelie")
+```
+
+## conflict resolution with conflicted
+
+After loading conflicted - `filter()` doesn't *silently* use `dplyr::filter()`:
+
+```{r}
+#| error: true
+
+library(conflicted)
+
+penguins |>
+  filter(species == "Adelie")
+```
+
+## conflict resolution with conflicted - option 1
+
+Pick the one you want with `::`:
+
+```{r}
+penguins |>
+  dplyr::filter(species == "Adelie")
+```
+
+## conflict resolution with conflicted - option 2
+
+declare a preference with `conflicts_prefer()`:
+
+```{r}
+conflicts_prefer(dplyr::filter)
+
+penguins |>
+  filter(species == "Adelie")
+```
+
+```{r}
+#| include: false
+
+options(dplyr.print_min = 6, dplyr.print_max = 6)
+```
+
+## teaching tip
+
+::: callout-tip
+## Don't hide startup messages from teaching materials
+
+Instead, address them early on to
+
+1.  Encourage reading and understanding messages, warnings, and errors
+2.  Help during hard-to-debug situations resulting from base R's silent conflict resolution
+
+But... Do teach students how to hide them in reports, particularly during editing/polishing stage!
+:::
+
+# dplyr 1.1.2
+
+## what's new in dplyr 1.1.2?
+
+A (non-exhaustive) list:
+
+-   Improved and expanded `_join()` functionality
+-   Added functionality for per operation grouping
+-   Quality of life improvements: `case_when()` and `if_else()`
+-   and more...
+
+## improved and expanded `_join()` functionality
+
+-   New `join_by()` function for the `by` argument in `*_join()` functions
+-   Handling various matches (one-to-one, one-to-many, many-to-many relationships, etc.) and unmatched cases
+-   and more...
+
+## `join_by()`
+
+::: columns
+::: {.column .fragment width="49%" fragment-index="1"}
+### previously
+
+```{r}
+#| eval: false
+#| code-line-numbers: "|4"
+
+x |>
+  *_join(
+    y, 
+    by = c("<x var>" = "<y var>")
+  )
+```
+:::
+
+::: {.column width="1%"}
+:::
+
+::: {.column .fragment width="49%" fragment-index="2"}
+### now - optionally
+
+```{r}
+#| eval: false
+#| code-line-numbers: "|4"
+
+x |>
+  *_join(
+    y, 
+    by = join_by(<x var> == <y var>)
+  )
+```
+:::
+:::
+
+## setup: `islands`
+
+We have the following information on the three islands we have penguins from:
+
+```{r}
+islands <- tribble(
+  ~name,       ~coordinates,
+  "Torgersen", "64°46′S 64°5′W",
+  "Biscoe",    "65°26′S 65°30′W",
+  "Dream",     "64°44′S 64°14′W"
+)
+
+islands
+```
+
+## `join_by()`
+
+::: columns
+::: {.column .fragment width="49%" fragment-index="1"}
+**with `by`:**
+
+```{r}
+#| code-line-numbers: "4"
+
+penguins |>
+  left_join(
+    islands, 
+    by = c("island" = "name")
+  ) |>
+  select(species, island, coordinates)
+```
+:::
+
+::: {.column width="1%"}
+:::
+
+::: {.column .fragment width="49%" fragment-index="2"}
+**with `join_by()`:**
+
+```{r}
+#| code-line-numbers: "4"
+
+penguins |>
+  left_join(
+    islands, 
+    by = join_by(island == name)
+  ) |>
+  select(species, island, coordinates)
+```
+:::
+:::
+
+## teaching tip
+
+::: callout-tip
+## Prefer `join_by()` over `by`
+
+So that
+
+1.  You can read it out loud as "where x is equal to y", just like in other logical statements where `==` is pronounced as "is equal to"
+2.  You don't have to worry about `by = c(x = y)` (which is invalid) vs. `by = c(x = "y")` (which is valid) vs. `by = c("x" = "y")` (which is also valid)
+:::
+
+## handling various matches
+
+::: columns
+::: {.column .fragment width="49%" fragment-index="1"}
+### previously
+
+```{r}
+#| eval: false
+
+*_join(
+  x,
+  y,
+  by
+)
+```
+:::
+
+::: {.column width="1%"}
+:::
+
+::: {.column .fragment width="49%" fragment-index="2"}
+### now - optionally
+
+```{r}
+#| eval: false
+#| code-line-numbers: "|5-7"
+
+*_join(
+  x,
+  y,
+  by,
+  multiple = "all",
+  unmatched = "drop",
+  relationship = NULL
+)
+```
+:::
+:::
+
+## setup: `three_penguins`
+
+Information about three penguins, one row per `samp_id`:
+
+```{r}
+#| output-location: column
+
+three_penguins <- tribble(
+  ~samp_id, ~species,    ~island,
+  1,        "Adelie",    "Torgersen",
+  2,        "Gentoo",    "Biscoe",
+  3,        "Chinstrap", "Dream"
+)
+
+three_penguins
+```
+
+## setup: `weight_measurements`
+
+Information about weight measurements of these penguins, one row per `samp_id`, `meas_id` combination:
+
+```{r}
+#| output-location: column
+
+weight_measurements <- tribble(
+  ~samp_id, ~meas_id, ~body_mass_g,
+  1,        1,        3220,
+  1,        2,        3250,
+  2,        1,        4730,
+  2,        2,        4725,
+  3,        1,        4000,
+  3,        2,        4050
+)
+
+weight_measurements
+```
+
+## setup: `flipper_measurements`
+
+Information about flipper length measurements of these penguins, one row per `samp_id`, `meas_id` combination:
+
+```{r}
+#| output-location: column
+
+flipper_measurements <- tribble(
+  ~samp_id, ~meas_id, ~flipper_length_mm,
+  1,        1,        193,
+  1,        2,        195,
+  2,        1,        214,
+  2,        2,        216,
+  3,        1,        203,
+  3,        2,        203
+)
+
+flipper_measurements
+```
+
+## one-to-many relationships - all good!
+
+```{r}
+three_penguins |>
+  left_join(weight_measurements, join_by(samp_id))
+```
+
+## many-to-many relationships - warning {.smaller}
+
+```{r}
+#| include: false
+
+options(
+  dplyr.print_min = 12, 
+  dplyr.print_max = 12
+)
+```
+
+::: question
+What does the following warning mean?
+:::
+
+```{r}
+weight_measurements |>
+  left_join(flipper_measurements, join_by(samp_id))
+```
+
+## many-to-many relationships - explosion of rows {.smaller}
+
+::: question
+We followed the warning's advice. Does the following look correct?
+:::
+
+```{r}
+weight_measurements |>
+  left_join(flipper_measurements, join_by(samp_id), relationship = "many-to-many")
+```
+
+## many-to-many relationships - rethink `join_by()`
+
+```{r}
+weight_measurements |>
+  left_join(flipper_measurements, join_by(samp_id, meas_id))
+```
+
+## setup: `four_penguins`
+
+Information about three penguins, one row per `samp_id`:
+
+```{r}
+#| output-location: column
+
+four_penguins <- tribble(
+  ~samp_id, ~species,    ~island,
+  1,        "Adelie",    "Torgersen",
+  2,        "Gentoo",    "Biscoe",
+  3,        "Chinstrap", "Dream",
+  4,        "Adelie",    "Biscoe"
+)
+
+four_penguins
+```
+
+## unmatched rows - poof!
+
+```{r}
+weight_measurements |>
+  left_join(four_penguins, join_by(samp_id))
+```
+
+## unmatched rows - `error`
+
+The `unmatched` argument protects you from accidentally dropping rows during a join:
+
+```{r}
+#| error: true
+
+weight_measurements |>
+  left_join(four_penguins, join_by(samp_id), unmatched = "error")
+```
+
+## unmatched rows - option 1
+
+Use `inner_join()`:
+
+```{r}
+weight_measurements |>
+  inner_join(four_penguins, join_by(samp_id))
+```
+
+## unmatched rows - option 2
+
+Set `unmatched = "drop"`:
+
+```{r}
+weight_measurements |>
+  left_join(four_penguins, join_by(samp_id), unmatched = "drop")
+```
+
+## unmatched rows - option 3
+
+Do nothing -- at your own risk!
+
+```{r}
+weight_measurements |>
+  left_join(four_penguins, join_by(samp_id))
+```
+
+```{r}
+#| include: false
+
+options(
+  dplyr.print_min = 6, 
+  dplyr.print_max = 6
+)
+```
+
+## and more...
+
+**Inequality joins** and **rolling joins**, made possible by `join_by()` being able to take expressions involving `>`, `<=`, etc.
+
+-   Learn more about inequality joins at <https://www.tidyverse.org/blog/2023/01/dplyr-1-1-0-joins/#inequality-joins>
+
+-   Learn more about rolling joins at <https://www.tidyverse.org/blog/2023/01/dplyr-1-1-0-joins/#rolling-joins>
+
+. . .
+
+::: callout-note
+## What are inequality joins and rolling joins?
+
+IYKYK!
+
+If not, [R4DS, 2nd Ed - Non-equi joins section](https://r4ds.hadley.nz/joins.html#sec-non-equi-joins) is a great place to learn about them!
+:::
+
+## teaching tip
+
+::: callout-tip
+## Exploding joins can be hard to debug for students!
+
+Teach students how to diagnose whether the join they performed, and that may not have given an error, is indeed the one they wanted to perform. Did they lose any cases? Did they gain an unexpected amount of cases? Did they perform a join without thinking and take down the entire teaching server? These things happen, particularly if students are working with their own data for an open-ended project!
+:::
+
+## added functionality for per operation grouping
+
+::: columns
+::: {.column .fragment width="49%" fragment-index="1"}
+### previously
+
+```{r}
+#| eval: false
+#| code-line-numbers: "|2"
+
+df |>
+  group_by(x) |>
+  summarize(mean(y))
+```
+:::
+
+::: {.column width="1%"}
+:::
+
+::: {.column .fragment width="49%" fragment-index="2"}
+### now - optionally
+
+```{r}
+#| eval: false
+#| code-line-numbers: "|4"
+
+df |>
+  summarize(
+    mean(y), 
+    .by = x
+  )
+```
+:::
+:::
+
+## persistent grouping - handle with `.groups`
+
+::: question
+Remember our "typical tidyverse pipeline"? Why did we set `.groups = "drop"` in `summarize()`?
+:::
+
+```{r}
+#| code-line-numbers: "|4"
+#| fig-alt: |
+#|   Dodged bar plot of average body masses of penguins by species and sex.
+#|   Gentoo penguins weigh more, on average, than Adelies and Chinstraps, 
+#|   and within each species males weigh more, on average, than females.
+
+penguins |>
+  drop_na(sex, body_mass_g) |>
+  group_by(species, sex) |>
+  summarize(mean_bw = mean(body_mass_g), .groups = "drop") |>
+  ggplot(aes(x = species, y = mean_bw, fill = sex)) +
+  geom_col(position = "dodge")
+```
+
+## persistent grouping - message
+
+::: question
+What if we don't set it? Why does `summarize()` emit a message even though the result doesn't change?
+:::
+
+```{r}
+#| code-line-numbers: "4"
+#| fig-alt: |
+#|   Dodged bar plot of average body masses of penguins by species and sex.
+#|   Gentoo penguins weigh more, on average, than Adelies and Chinstraps, 
+#|   and within each species males weigh more, on average, than females.
+
+penguins |>
+  drop_na(sex, body_mass_g) |>
+  group_by(species, sex) |>
+  summarize(mean_bw = mean(body_mass_g)) |>
+  ggplot(aes(x = species, y = mean_bw, fill = sex)) +
+  geom_col(position = "dodge")
+```
+
+## persistent grouping - downstream effects
+
+::: columns
+::: {.column width="49%"}
+**persistent groups:**
+
+```{r}
+penguins |>
+  drop_na(sex, body_mass_g) |>
+  group_by(species, sex) |>
+  summarize(mean_bw = mean(body_mass_g)) |>
+  slice_head(n = 1)
+```
+:::
+
+::: {.column width="1%"}
+:::
+
+::: {.column width="49%"}
+**dropped groups:**
+
+```{r}
+penguins |>
+  drop_na(sex, body_mass_g) |>
+  group_by(species, sex) |>
+  summarize(mean_bw = mean(body_mass_g), .groups = "drop") |>
+  slice_head(n = 1)
+```
+:::
+:::
+
+## persistent grouping - downstream effects
+
+::: columns
+::: {.column width="49%"}
+**persistent groups:**
+
+```{r}
+penguins |>
+  drop_na(sex, body_mass_g) |>
+  group_by(species, sex) |>
+  summarize(mean_bw = mean(body_mass_g)) |>
+  gt::gt()
+```
+:::
+
+::: {.column width="1%"}
+:::
+
+::: {.column width="49%"}
+**dropped groups:**
+
+```{r}
+penguins |>
+  drop_na(sex, body_mass_g) |>
+  group_by(species, sex) |>
+  summarize(mean_bw = mean(body_mass_g), .groups = "drop") |>
+  gt::gt()
+```
+:::
+:::
+
+## handling grouping - option 1
+
+What we've already seen, explicitly selecting what to do with groups with `.groups`:
+
+::: columns
+::: {.column width="49%"}
+**drop groups:**
+
+```{r}
+#| code-line-numbers: "6"
+
+penguins |>
+  drop_na(sex, body_mass_g) |>
+  group_by(species, sex) |>
+  summarize(
+    mean_bw = mean(body_mass_g), 
+    .groups = "drop"
+  )
+```
+:::
+
+::: {.column width="1%"}
+:::
+
+::: {.column width="49%"}
+**keep groups:**
+
+```{r}
+#| code-line-numbers: "6"
+
+penguins |>
+  drop_na(sex, body_mass_g) |>
+  group_by(species, sex) |>
+  summarize(
+    mean_bw = mean(body_mass_g), 
+    .groups = "keep"
+  )
+```
+:::
+:::
+
+## handling grouping - option 2
+
+Using **per-operation grouping** with `.by`:
+
+::: columns
+::: {.column width="49%"}
+**group by 1 var:**
+
+```{r}
+#| code-line-numbers: "5"
+
+penguins |>
+  drop_na(sex, body_mass_g) |>
+  summarize(
+    mean_bw = mean(body_mass_g), 
+    .by = species
+  )
+```
+:::
+
+::: {.column width="1%"}
+:::
+
+::: {.column width="49%"}
+**group by 2+ vars:**
+
+```{r}
+#| code-line-numbers: "5"
+
+penguins |>
+  drop_na(sex, body_mass_g) |>
+  summarize(
+    mean_bw = mean(body_mass_g), 
+    .by = c(species, sex)
+  )
+```
+:::
+:::
+
+## `group_by()` vs. `.by`
+
+::: incremental
+-   `group_by()` is not superseded and not going away, `.by` is an alternative if you want per-operation grouping.
+
+-   Some verbs take `by` instead of `.by` as an argument 😞, but they come with informative errors 🙂
+
+-   `.by` always returns an ungrouped data frame
+
+-   You can't create variables on the fly in `.by`, you must create them earlier in your pipeline, e.g., unlike `df |> group_by(month = floor_date(date, "month"))`
+
+-   `.by` doesn't sort grouping keys, `group_by()` always sorts keys in ascending order, which affects the results of verbs like `summarise()`, e.g., see the species orders in the two previous slides
+:::
+
+## teaching tip
+
+::: callout-tip
+## Choose one grouping method and stick to it
+
+It doesn't matter whether you use `group_by()` (followed by `.groups`, where needed) or `.by`.
+
+-   For new learners, pick one and stick to it.
+-   For more experienced learners, particularly those learning to design their own functions and packages, it can be interesting to go through the differences and evolution.
+:::
+
+## quality of life improvements
+
+for `case_when()` and `if_else()`:
+
+-   all else denoted by `.default` for `case_when()`
+-   less strict about value type for both
+
+<br>
+
+::: columns
+::: {.column .fragment width="49%" fragment-index="1"}
+### previously
+
+```{r}
+#| eval: false
+#| code-line-numbers: "|7"
+
+df |>
+  mutate(
+    x = case_when(
+      <condition 1> ~ "value 1",
+      <condition 2> ~ "value 2",
+      <condition 3> ~ "value 3",
+      TRUE          ~ NA_character_
+    )
+  )
+```
+:::
+
+::: {.column width="1%"}
+:::
+
+::: {.column .fragment width="49%" fragment-index="2"}
+### now - optionally
+
+```{r}
+#| eval: false
+#| code-line-numbers: "|7"
+
+df |>
+  mutate(
+    x = case_when(
+      <condition 1> ~ "value 1",
+      <condition 2> ~ "value 2",
+      <condition 3> ~ "value 3",
+      .default = NA
+    )
+  )
+```
+:::
+:::
+
+## setup: `penguin_quantiles`
+
+```{r}
+penguins |>
+  reframe(bm_cat = quantile(body_mass_g, c(0.25, 0.75), na.rm = TRUE))
+```
+
+## `case_when()` {.smaller}
+
+```{r}
+penguins |>
+  mutate(
+    bm_cat = case_when(
+      is.na(body_mass_g) ~ NA,
+      body_mass_g < 3550 ~ "Small",
+      between(body_mass_g, 3550, 4750) ~ "Medium",
+      .default = "Large"
+    )
+  ) |>
+  relocate(body_mass_g, bm_cat)
+```
+
+## `if_else()`
+
+```{r}
+penguins |>
+  mutate(
+    bm_unit = if_else(!is.na(body_mass_g), paste(body_mass_g, "g"), NA)
+  ) |>
+  relocate(body_mass_g, bm_unit)
+```
+
+## teaching tip
+
+::: callout-tip
+## It's a blessing to not have to introduce `NA_character_` and friends
+
+Especially not having to introduce it as early as `if_else()` and `case_when()`. Cherish it!
+
+Different types of `NA`s are a good topic for a course on R as a programming language, statistical computing, etc. but not necessary for an intro course.
+:::
+
+## and more...
+
+-   Further simplify your `case_when()` statements with `case_match()`
+-   Selecting columns inside a function like `mutate()` or `summarize()` with `pick()`
+-   Reproducibility and performance updates to `arrange()`
+-   Read more at <https://www.tidyverse.org/tags/dplyr-1-1-0/>
+
+# tidyr 1.3.0
+
+## new `separate_*()` functions
+
+that supersede [`extract()`](https://tidyr.tidyverse.org/reference/extract.html), [`separate()`](https://tidyr.tidyverse.org/reference/separate.html), and [`separate_rows()`](https://tidyr.tidyverse.org/reference/separate_rows.html) because they have more consistent names and arguments, have better performance, and provide a new approach for handling problems:\
+
+|                                  | **MAKE COLUMNS**                                                                               | **MAKE ROWS**                                                                                    |
+|-------------------|---------------------------|---------------------------|
+| Separate with delimiter          | [`separate_wider_delim()`](https://tidyr.tidyverse.org/reference/separate_wider_delim.html)    | [`separate_longer_delim()`](https://tidyr.tidyverse.org/reference/separate_longer_delim.html)    |
+| Separate by position             | [`separate_wider_position()`](https://tidyr.tidyverse.org/reference/separate_wider_delim.html) | [`separate_longer_position()`](https://tidyr.tidyverse.org/reference/separate_longer_delim.html) |
+| Separate with regular expression | [`separate_wider_regex()`](https://tidyr.tidyverse.org/reference/separate_wider_delim.html)    |                                                                                                  |
+
+## setup: `three_penguin_descriptions`
+
+```{r}
+three_penguin_descriptions <- tribble(
+  ~id, ~description,
+  1,   "Species: Adelie, Island - Torgersen",
+  1,   "Species: Gentoo, Island - Biscoe",
+  1,   "Species: Chinstrap, Island - Dream",
+)
+
+three_penguin_descriptions
+```
+
+## `separate_wider_delim()`
+
+```{r}
+three_penguin_descriptions |>
+  separate_wider_delim(
+    cols = description,
+    delim = ", ",
+    names = c("species", "island")
+  )
+```
+
+## `separate_wider_regex()`
+
+*If you're into that sort of thing...*
+
+```{r}
+three_penguin_descriptions |>
+  separate_wider_regex(
+    cols = description,
+    patterns = c(
+      "Species: ", species = "[^,]+", 
+      ", ", 
+      "Island - ", island = ".*"
+    )
+  )
+```
+
+## enhanced reporting when things fail {.smaller}
+
+::: columns
+::: {.column .fragment width="49%" fragment-index="1"}
+### previously
+
+```{r}
+#| eval: false
+#| code-line-numbers: "|8-9"
+
+separate(
+  data,
+  col,
+  into,
+  sep = "[^[:alnum:]]+",
+  remove = TRUE,
+  convert = FALSE,
+  extra = "warn",
+  fill = "warn",
+  ...
+)
+```
+:::
+
+::: {.column width="1%"}
+:::
+
+::: {.column .fragment width="49%" fragment-index="2"}
+### now
+
+```{r}
+#| eval: false
+#| code-line-numbers: "|9-10"
+
+separate_wider_*(
+  data,
+  cols,
+  <depends on method to separate>,
+  ...,
+  names = NULL,
+  names_sep = NULL,
+  names_repair = "check_unique",
+  too_few = c("error", "debug", "align_start", "align_end"),
+  too_many = c("error", "debug", "drop", "merge"),
+  cols_remove = TRUE  
+)
+```
+:::
+:::
+
+## teaching tip
+
+::: callout-tip
+## Excel text-to-column users are used to different approaches to "separate"
+
+If teaching folks coming from doing data manipulation in spreadsheets, leverage that to motivate different types of `separate_*()` functions, and show the benefits of programming over point-and-click software for more advanced operations like separating longer and separating with regular expressions.
+:::
+
+# and more...
+
+## other tidyverse updates
+
+::: incremental
+-   Better **stringr** and **tidyr** alignment
+-   Ability to distinguish between `NA` in levels vs. `NA` in values in **forcats**
+-   New (more straightforward to learn/teach!) API for **rvest**
+-   Shorter, more readable, and (in some cases) faster SQL queries in **dbplyr**
+-   and more ...
+:::
+
+## keeping up with the tidyverse
+
+If you are interested in closely keeping up with updates in the tidyverse, the [Tidyverse blog](https://www.tidyverse.org/blog/) is the best place to read!
+
+```{=html}
+<iframe src="https://www.tidyverse.org/blog/" width="100%" height="550" title="Tidyverse blog"></iframe>
+```
+## other tidyverse adjacent developments
+
+The Tidyverse blog is also a great place to keep up with
+
+-   **tidymodels** updates
+
+-   and the magic that is **webR**! ✨
+
+## learn more
+
+::: columns
+::: {.column width="50%"}
+For a comprehensive overview of data science with R and the tidyverse, read the recently updated, and very soon to be available in paperback, [R for Data Science, 2nd Edition](https://r4ds.hadley.nz/).
+:::
+
+::: {.column width="50%"}
+[![](images/r4ds-cover.jpg){fig-alt="Cover of R for Data Science, 2nd Edition" fig-align="center"}](https://r4ds.hadley.nz/)
+:::
+:::
+
+# thank you!
+
+::: preslink
+🔗 <https://mine.quarto.pub/tidyverse-2023>
+<br><br>
+💻 <https://github.com/mine-cetinkaya-rundel/tidyverse-2023>
+:::
+
+::: footer
+:::
+
+# References
+
+## Packages
+
+-   **tidyverse:** Wickham H, Averick M, Bryan J, Chang W, McGowan LD, François R, Grolemund G, Hayes A, Henry L, Hester J, Kuhn M, Pedersen TL, Miller E, Bache SM, Müller K, Ooms J, Robinson D, Seidel DP, Spinu V, Takahashi K, Vaughan D, Wilke C, Woo K, Yutani H (2019). "Welcome to the tidyverse." *Journal of Open Source Software*, *4*(43), 1686. doi:10.21105/joss.01686 <https://doi.org/10.21105/joss.01686>.
+
+-   **palmerpenguins:** Horst AM, Hill AP, Gorman KB (2020). palmerpenguins: Palmer Archipelago (Antarctica) penguin data. R package version 0.1.0. [https://allisonhorst.github.io/palmerpenguins/. doi: 10.5281/zenodo.3960218](https://allisonhorst.github.io/palmerpenguins/.%20doi:%2010.5281/zenodo.3960218).
+
+-   **conflicted:** Wickham H (2023). *conflicted: An Alternative Conflict Resolution Strategy*. R package version 1.2.0, <https://CRAN.R-project.org/package=conflicted>.
+
+-   **gt:** Iannone R, Cheng J, Schloerke B, Hughes E, Lauer A, Seo J (2023). *gt: Easily Create Presentation-Ready Display Tables*. R package version 0.9.0, <https://CRAN.R-project.org/package=gt>.

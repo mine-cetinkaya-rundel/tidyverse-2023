@@ -1,0 +1,23 @@
+<style>
+  .hide {
+    display: none !important;
+  }
+</style>
+
+
+<script>
+  function remove() {
+    let footer = document.querySelector('div.footer-default');
+    footer.classList.add('hide');
+  
+    Reveal.on('slidechanged', event => {  
+      if(Reveal.isFirstSlide()) {
+        footer.classList.add('hide');
+      } else {
+        footer.classList.remove('hide');
+      }
+    });
+  }
+  
+  window.onload = remove();
+</script>

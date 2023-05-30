@@ -1,0 +1,77 @@
+/*-- scss:defaults --*/
+
+// fonts
+@import 'https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible&display=swap';
+@import 'https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@700&family=Gochi+Hand&display=swap';
+@import 'https://fonts.googleapis.com/css2?family=Gochi+Hand&display=swap';
+
+
+$font-family-sans-serif: "Atkinson Hyperlegible", sans-serif;
+$code-block-font-size: 0.8em;
+$code-color: #5f5f5f;
+$link-color: #234d83;
+$presentation-heading-color: #4e709b;
+
+/*-- scss:rules --*/
+
+/* title slide */
+
+#title-slide {
+  text-align: right;
+  color: #404040;
+  
+  .title {
+    color: #4e709b;
+  }
+  
+  .subtitle a {
+    background-color: #F9EBAB;
+  }
+
+  .quarto-title-authors {
+    justify-content: right;
+  
+    .quarto-title-author { // optional, test it for yourself
+      padding-left: 0;
+      padding-right: 0;
+      width: 100%;
+    }
+  }
+    
+}
+
+
+/* colors */
+
+.reveal h3 {
+  color: #008080;
+  font-family: Gochi Hand;
+}
+
+/* font sizes */
+
+.medium {
+  font-size: 0.85em;
+}
+
+.small {
+  font-size: 0.75em;
+}
+
+/* custom divs */
+
+.reveal .slide .question {
+  padding-right: 10px;
+  padding-left: 10px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  margin-bottom: 20px;
+  margin-top: 6px;
+  border-left: solid 5px #4e709b;
+  background-color: #4e709b50;
+}
+
+.reveal .slide .preslink {
+  background-color: #F9EBAB;
+  font-size: 1.5em;
+}
