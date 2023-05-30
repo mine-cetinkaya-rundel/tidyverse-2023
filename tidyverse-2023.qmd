@@ -1180,8 +1180,8 @@ that supersede [`extract()`](https://tidyr.tidyverse.org/reference/extract.html)
 three_penguin_descriptions <- tribble(
   ~id, ~description,
   1,   "Species: Adelie, Island - Torgersen",
-  1,   "Species: Gentoo, Island - Biscoe",
-  1,   "Species: Chinstrap, Island - Dream",
+  2,   "Species: Gentoo, Island - Biscoe",
+  3,   "Species: Chinstrap, Island - Dream",
 )
 
 three_penguin_descriptions
@@ -1281,8 +1281,9 @@ If teaching folks coming from doing data manipulation in spreadsheets, leverage 
 ### previously
 
 ```{r}
-#| code-line-numbers: "|5"
+#| code-line-numbers: "|6"
 #| message: false
+#| fig-asp: 0.4
 
 penguins |>
   drop_na() |>
@@ -1300,8 +1301,9 @@ penguins |>
 ### now
 
 ```{r}
-#| code-line-numbers: "|5"
+#| code-line-numbers: "|6"
 #| message: false
+#| fig-asp: 0.4
 
 penguins |>
   drop_na() |>
