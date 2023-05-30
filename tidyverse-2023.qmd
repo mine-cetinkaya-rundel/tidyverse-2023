@@ -1272,6 +1272,47 @@ separate_wider_*(
 If teaching folks coming from doing data manipulation in spreadsheets, leverage that to motivate different types of `separate_*()` functions, and show the benefits of programming over point-and-click software for more advanced operations like separating longer and separating with regular expressions.
 :::
 
+# ggplot2 3.4.0
+
+## linewidth
+
+::: columns
+::: {.column .fragment width="49%" fragment-index="1"}
+### previously
+
+```{r}
+#| code-line-numbers: "|5"
+#| message: false
+
+penguins |>
+  drop_na() |>
+  ggplot(
+    aes(x = flipper_length_mm, y = body_mass_g)
+  ) +
+  geom_smooth(size = 2)
+```
+:::
+
+::: {.column width="1%"}
+:::
+
+::: {.column .fragment width="49%" fragment-index="2"}
+### now
+
+```{r}
+#| code-line-numbers: "|5"
+#| message: false
+
+penguins |>
+  drop_na() |>
+  ggplot(
+    aes(x = flipper_length_mm, y = body_mass_g)
+  ) +
+  geom_smooth(linewidth = 2)
+```
+:::
+:::
+
 # and more...
 
 ## other tidyverse updates
