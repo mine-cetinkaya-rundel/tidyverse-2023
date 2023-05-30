@@ -9,11 +9,14 @@
   - ✅  Joins: https://www.tidyverse.org/blog/2023/01/dplyr-1-1-0-joins/
     - `join_by()`
     - Multiple matches / warnings
-    - Inequality and rolling joins
+    - More: Inequality and rolling joins
   - ✅ Grouping: https://www.tidyverse.org/blog/2023/02/dplyr-1-1-0-per-operation-grouping/
     - Persistent vs. per operation grouping
-  - `case_when()` + `if_else()`: https://www.tidyverse.org/blog/2023/02/dplyr-1-1-0-vctrs/
-  - `pick()`: https://www.tidyverse.org/blog/2023/02/dplyr-1-1-0-pick-reframe-arrange/
+  - ✅ `case_when()` + `if_else()`: https://www.tidyverse.org/blog/2023/02/dplyr-1-1-0-vctrs/
+  - ✅ more:
+    - `arrange()`
+    - `pick()`: https://www.tidyverse.org/blog/2023/02/dplyr-1-1-0-pick-reframe-arrange/
+    - `case_match()`
 - tidyr: https://www.tidyverse.org/blog/2023/01/tidyr-1-3-0/
   - `separate_*()` family of functions 
 - forcats: https://www.tidyverse.org/blog/2023/01/forcats-1-0-0/
